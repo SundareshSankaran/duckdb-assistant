@@ -10,14 +10,13 @@ Refer this [doc](https://github.com/SundareshSankaran/duckdb-assistant/blob/main
 
 
 ## Installation
+
+### Local installation
 1. Clone this repository
 2. To install locally in editable mode, refer [here](https://github.com/SundareshSankaran/duckdb-assistant/blob/main/build/local_install_quick_start.md)
 
+### From PyPi
 Run the following command for a pip installation of the package from PyPi.
-
-
-> [!WARNING]
-> This package is not yet registered on PyPi.  The following command shall be valid once it's made available.
 
 ```shell
 
@@ -119,8 +118,8 @@ An example env file ([sample.env](https://github.com/SundareshSankaran/duckdb-as
 This repository contains a `tasks.json` meant for use in Visual Studio Code which helps clean up temporary files and stands up a virtual environment for quick development and exploration.  Remove this file if you do not want to have Visual Studio Code run the tasks in `tasks.json`.
 
 ## Change Log
-* Version: 0.0.1 (30JUL2026)
-  - Initial push to GitHub
+* Version: 0.1.0 (30JUL2026)
+  - First publish of package
 
 
 Refer  [`CHANGELOG.md`](https://github.com/SundareshSankaran/duckdb-assistant/blob/main/docs/CHANGELOG.md) for other changes.
