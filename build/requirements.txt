@@ -1,0 +1,16 @@
+# Core packages
+python-dotenv
+duckdb
+google-genai
+mcp
+
+# Supporting packages
+jupyter
+ipykernel
+
+# Build and distribution packages
+setuptools
+build
+twine
+
+

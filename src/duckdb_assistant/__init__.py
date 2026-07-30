@@ -1,0 +1,1 @@
+from duckdb_assistant.assistant import DuckDBAssistant
