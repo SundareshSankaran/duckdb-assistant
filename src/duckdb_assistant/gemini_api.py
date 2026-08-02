@@ -1,4 +1,4 @@
-def generate_duckdb_query(system_prompt: str,user_prompt: str) -> str:
+def generate_duckdb_query(system_prompt: str,user_prompt: str, explain_results: bool) -> dict:
     """This function generates DuckDB SQL based on a given user prompt using the Gemini API."""
     import os
     import json
@@ -29,10 +29,13 @@ def generate_duckdb_query(system_prompt: str,user_prompt: str) -> str:
             time.sleep(time_delay)
             continue
 
-    duckdb_query = response.text
+    response_text = response.text
     pattern = r"```(?:sql)?\s*\n(.*?)\n```"
-    m = re.search(pattern, duckdb_query, re.DOTALL | re.IGNORECASE)
+    m = re.search(pattern, response_text, re.DOTALL | re.IGNORECASE)
 
     if m:
         duckdb_query = m.group(1).strip()
-    return duckdb_query
+        response_dict = {"query": duckdb_query, "response_text": response_text}
+    else:
+        response_dict = {"query": "", "response_text": response_text}
+    return response_dict
