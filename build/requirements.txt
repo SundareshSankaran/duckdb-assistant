@@ -1,7 +1,7 @@
 # Core packages
-python-dotenv
-duckdb
-google-genai
+# python-dotenv
+# duckdb
+# google-genai
 mcp
 
 # Supporting packages
