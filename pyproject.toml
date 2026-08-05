@@ -4,11 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "duckdb-assistant"
-version = "0.2.1"
+version = "0.3.0"
 dependencies = [
     "duckdb",
     "google-genai",
-    "python-dotenv"
+    "python-dotenv",
+    "chromadb"
 ]
 authors = [
   { name="Sundaresh Sankaran", email="sundaresh.sankaran@gmail.com" },

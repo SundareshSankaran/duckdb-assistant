@@ -113,13 +113,17 @@ GEMINI_API_KEY = <your_key>
 
 An example env file ([sample.env](https://github.com/SundareshSankaran/duckdb-assistant/blob/main/sample.env)) is provided for this purpose.  Rename this to `.env` and use.
 
+## Retrieval Augmented Generation (RAG)
+This package uses Retrieval Augmented Generation (RAG) based on DuckDB documentation to provide context that can assist the LLM in generating SQL.  This is controlled through a `use_rag` parameter in the `generate` method which can be turned off if desired. RAG tends to be useful when dealing with complex SQL generation.
+
+To facilitate RAG, a `search` method and a `sync_docs` method are also provided in the package.  The `search` method helps you search against local, i.e. documentation-based knowledge without having to use an LLM.  The `sync_docs` method can be run at periodic intervals to ensure current documentation from the DuckDB project reflects in a local vector database.  The `DOC_REPO_URL` and `DOC_FOLDER_PATH` parameters in your `.env` can also be modified to point to other (for e.g. customised) documents you wish to use in RAG. `DOC_REPO_URL` points to the GitHub (or other web) URL you want to use and `DOC_FOLDER_PATH` refers to the folder path within the repo identified by `DOC_REPO_URL`.
 
 ## Convenience: tasks.json
 This repository contains a `tasks.json` meant for use in Visual Studio Code which helps clean up temporary files and stands up a virtual environment for quick development and exploration.  Remove this file if you do not want to have Visual Studio Code run the tasks in `tasks.json`.
 
 ## Change Log
-* Version: 0.2.1 (02AUG2026)
-  - Add dependencies
+* Version: 0.3.0 (05AUG2026)
+  - Add search method and RAG 
 
 
 Refer  [`CHANGELOG.md`](https://github.com/SundareshSankaran/duckdb-assistant/blob/main/docs/CHANGELOG.md) for other changes.
