@@ -80,20 +80,17 @@ def store_in_chroma(docs: List[Dict], collection_name: str = "markdown_docs", pe
     """
     import chromadb
     
-    client = chromadb.PersistentClient(path=persist_dir)
-    collection = client.get_or_create_collection(name=collection_name)
-
-    ids = [doc["id"] for doc in docs]
-    documents = [doc["content"] for doc in docs]
-    metadatas = [doc["metadata"] for doc in docs]
-
-    collection.upsert(
-        ids=ids,
-        documents=documents,
-        metadatas=metadatas,
-    )
-    collection_count = collection.count()
-    client.close()
+    with chromadb.PersistentClient(path=persist_dir) as client:
+        collection = client.get_or_create_collection(name=collection_name)
+        ids = [doc["id"] for doc in docs]
+        documents = [doc["content"] for doc in docs]
+        metadatas = [doc["metadata"] for doc in docs]
+        collection.upsert(
+            ids=ids,
+            documents=documents,
+            metadatas=metadatas,
+        )
+        collection_count = collection.count()
     return collection_count
 
 

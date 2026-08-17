@@ -2,8 +2,8 @@ from pathlib import Path
 import shutil
 
 root = Path(__file__).resolve().parents[1]
-delete_dirs = {"__pycache__", ".ipynb_checkpoints", ".pytest_cache", "buildproj", "node_modules"}
-delete_files = {".DS_Store"}
+delete_dirs = {"__pycache__", ".ipynb_checkpoints", ".pytest_cache", "venv", "node_modules","duckdb_assistant.egg-info"}
+delete_files = {".DS_Store",".egg-info"}
 
 for path in root.rglob("*"):
     if path.is_dir() and path.name in delete_dirs:
