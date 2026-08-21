@@ -1,8 +1,8 @@
 class DuckDBAssistant:
     """This initialises a class to help you generate and execute DuckDB queries."""
-    def __init__(self, additional_system_prompt: str = None, name: str = None, creationTimeStamp: str = None, createdBy: str = None, dd: duckdb.DuckDBPyConnection = None, initial_sql: str = None, chroma_collection_path: str = None) -> object:
+    def __init__(self, additional_system_prompt: str = None, name: str = None, creationTimeStamp: str = None, createdBy: str = None, dd: DuckDBPyConnection = None, initial_sql: str = None, chroma_collection_path: str = None) -> object:
         import json
-        import duckdb as dd
+        import duckdb 
         import os
         from .helpers import soft_warning, check_collection_exists
 
@@ -26,7 +26,7 @@ class DuckDBAssistant:
         self.creationTimeStamp=creationTimeStamp if creationTimeStamp else self.creationTimeStamp 
         self.createdBy=createdBy  if createdBy else self.createdBy
         self.system_prompt = system_prompt if system_prompt else self.system_prompt
-        self.dd = dd if dd else duckdb.connect()
+        self.dd = dd if dd != None else duckdb.connect()
 
         self.dd.execute(initial_sql) if initial_sql else None
 
@@ -137,6 +137,9 @@ class DuckDBAssistant:
             else:
                 return {"error":"Collection is empty"}
         
-
+    def set_duckdb(self, dd: DuckDBPyConnection):
+        "Given a DuckDB connection object (`DuckDBPyConnection`), sets the `dd` attribute in the Class instance to the connection."
+        self.dd = dd
+        return f"DuckDB connection set to {dd}"
 
 

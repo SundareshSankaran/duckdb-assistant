@@ -10,6 +10,7 @@
 |4|`change_name`|`new_name: str`|Success / Failure Message (`str`)|This function changes the name of a DuckDBAssistant. Provide the new name as an argument.|
 |5|`sync_docs`| |Success / Failure Message (`str`)|This function retrieves data from a specified knowledge source and makes it available in a Chroma collection to help DuckDB Assistant.|
 |6|`search`|`prompt:str`<br>`n_results:int` |`results: dict`<br>----<br>`{"documents":[],"metadatas":[]}`|Given a user `prompt`, retrieve top `n_results` in terms of similarity to provide Retrieval Augmented Generation (RAG)|
+|7|`set_duckdb`|`dd:DuckDBPyConnection` |Success message|Given a DuckDB connection object (`DuckDBPyConnection`), sets the `dd` attribute in the Class instance to the connection. |
 
 ## Class Parameters
 
