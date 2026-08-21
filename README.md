@@ -2,11 +2,11 @@
 
 This repository provides a Python class and associated methods to generate and execute DuckDB SQL. 
 
-[DuckDB](https://duckdb.org) is an open-source, low-footprint, in-process query processing engine which provides access to several data stores and structures like Parquet, CSV, JSON and data located in conventional Relational Database Management Systems (RDBMS). This package uses the [`duckdb`](https://pypi.org/project/duckdb/) Python package along with methods to call a Large Language Model (LLM) from Google Gemini to generate code in a convenient and conversational manner. 
+[DuckDB](https://duckdb.org) is an open-source, low-footprint, in-process query processing engine which can access several data stores and structures like Parquet, CSV, JSON as well as data in conventional Relational Database Management Systems (RDBMS). This package uses the [`duckdb`](https://pypi.org/project/duckdb/) Python package along with methods to call a Large Language Model (LLM) from Google Gemini to generate code in a convenient and conversational manner. 
 
 A wiki of this repo has been generated using DeepWiki and is available here: [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/SundareshSankaran/duckdb-assistant)
 
-Refer this [doc](https://github.com/SundareshSankaran/duckdb-assistant/blob/main/docs/VISION.md) for more details on how this project will evolve.
+Refer this [document](https://github.com/SundareshSankaran/duckdb-assistant/blob/main/docs/VISION.md) for more details on how this project will evolve.
 
 
 ## Installation
