@@ -33,8 +33,10 @@ def find_markdown_files(root_folder: str) -> List[Path]:
     Recursively find all .md files under root_folder.
     """
     from pathlib import Path
+    from itertools import chain
     root = Path(root_folder)
-    return [p for p in root.rglob("*.md") if p.is_file()]
+    patterns = chain(root.rglob("*.md"), root.rglob("*.qmd"))
+    return [p for p in patterns if p.is_file()]
 
 def extract_title(md_text: str, fallback: str) -> str:
     for line in md_text.splitlines():

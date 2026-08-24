@@ -52,7 +52,7 @@ class DuckDBAssistant:
     def __setitem__(self, key, value):
         setattr(self, key, value)
    
-    def generate(self, prompt:str, explain_results: bool = False, use_rag: bool = True ) -> dict:
+    def generate(self, prompt:str, explain_results: bool = False, use_rag: bool = True, sql_file_path: str = None ) -> dict:
         """This function generates a DuckDB SQL query based on a given prompt using Gemini API. Provide the prompt as an argument."""
         from .gemini_api import generate_duckdb_query
         from .helpers import soft_warning, check_collection_exists
@@ -72,6 +72,9 @@ class DuckDBAssistant:
         try:
             query_result = generate_duckdb_query(system_prompt = system_prompt,user_prompt = f"User prompt: {prompt}", explain_results = explain_results)
             self.last_query = {"user_prompt": prompt,"response_text": query_result["response_text"], "duckdb_query": query_result["query"]}
+            if sql_file_path:
+                with open(sql_file_path,"w",encoding="utf-8") as f:
+                    f.write(query_result["query"])
             return query_result
         except Exception as e:
             return {"query": f"Error occurred: {e}"}
@@ -84,31 +87,73 @@ class DuckDBAssistant:
         except Exception as e:
             return f"Error occurred: {e}"
 
-    def execute(self, prompt:str) -> DuckDBPyConnection:
+    def execute(self, prompt:str=None, sql_file_path:str = None) -> DuckDBPyConnection:
         """This function executes a DuckDB SQL query based on a given prompt using Gemini API. Provide the prompt as an argument."""
-        try:
-            llm_response = self.generate(prompt)
-            if "query" not in llm_response or not llm_response["query"] or llm_response["query"].strip() == "":
-                return f"Error occurred: No query generated. Response: {llm_response}"
-            else:
-                duckdb_query = llm_response["query"]
+        if prompt == None or prompt == "":
+            if sql_file_path:
+                with open(sql_file_path,"r",encoding="utf-8") as f:
+                    duckdb_query = f.read()
                 result = self.dd.execute(duckdb_query)
                 return result
-        except Exception as e:
-            return f"Error occurred: {e}"
+            else:
+                return "SQL File path not provided."
+        else:
+            if sql_file_path:
+                try:
+                    llm_response = self.generate(prompt, sql_file_path = sql_file_path)
+                    if "query" not in llm_response or not llm_response["query"] or llm_response["query"].strip() == "":
+                        return f"Error occurred: No query generated. Response: {llm_response}"
+                    else:
+                        duckdb_query = llm_response["query"]
+                        result = self.dd.execute(duckdb_query)
+                        return result
+                except Exception as e:
+                    return f"Error occurred: {e}"
+            else:
+                try:
+                    llm_response = self.generate(prompt)
+                    if "query" not in llm_response or not llm_response["query"] or llm_response["query"].strip() == "":
+                        return f"Error occurred: No query generated. Response: {llm_response}"
+                    else:
+                        duckdb_query = llm_response["query"]
+                        result = self.dd.execute(duckdb_query)
+                        return result
+                except Exception as e:
+                    return f"Error occurred: {e}"
 
-    def sql(self, prompt:str) -> DuckDBPyRelation:
-            """This function lazily executes a DuckDB SQL query based on a given prompt using Gemini API. Provide the prompt as an argument."""
-            try:
-                llm_response = self.generate(prompt)
-                if "query" not in llm_response or not llm_response["query"] or llm_response["query"].strip() == "":
-                    return f"Error occurred: No query generated. Response: {llm_response}"
-                else:
-                    duckdb_query = llm_response["query"]
-                    result = self.dd.sql(duckdb_query)
-                    return result
-            except Exception as e:
-                return f"Error occurred: {e}"
+    def sql(self, prompt:str = None, sql_file_path:str = None) -> DuckDBPyRelation:
+        """This function lazily executes a DuckDB SQL query based on a given prompt using Gemini API. Provide the prompt as an argument."""
+        if prompt == None or prompt == "":
+            if sql_file_path:
+                with open(sql_file_path,"r",encoding="utf-8") as f:
+                    duckdb_query = f.read()
+                result = self.dd.execute(duckdb_query)
+                return result
+            else:
+                return "SQL File path not provided."
+        else:
+            if sql_file_path:
+                try:
+                    llm_response = self.generate(prompt, sql_file_path=sql_file_path)
+                    if "query" not in llm_response or not llm_response["query"] or llm_response["query"].strip() == "":
+                        return f"Error occurred: No query generated. Response: {llm_response}"
+                    else:
+                        duckdb_query = llm_response["query"]
+                        result = self.dd.sql(duckdb_query)
+                        return result
+                except Exception as e:
+                    return f"Error occurred: {e}"
+            else:
+                try:
+                    llm_response = self.generate(prompt)
+                    if "query" not in llm_response or not llm_response["query"] or llm_response["query"].strip() == "":
+                        return f"Error occurred: No query generated. Response: {llm_response}"
+                    else:
+                        duckdb_query = llm_response["query"]
+                        result = self.dd.sql(duckdb_query)
+                        return result
+                except Exception as e:
+                    return f"Error occurred: {e}"
 
     def sync_docs(self) -> str:
         """This function retrieves data from a specified knowledge source and makes it available in a Chroma collection to help DuckDB Assistant"""
@@ -141,5 +186,6 @@ class DuckDBAssistant:
         "Given a DuckDB connection object (`DuckDBPyConnection`), sets the `dd` attribute in the Class instance to the connection."
         self.dd = dd
         return f"DuckDB connection set to {dd}"
+
 
 

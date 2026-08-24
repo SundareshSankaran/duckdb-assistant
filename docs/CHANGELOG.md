@@ -2,6 +2,7 @@
 
 |Version|Date|Details|Type|
 |-------|----|-------|----|
+|0.5.0 |24AUG2026|Add file based execution to generate, execute and sql methods |Minor|
 |0.4.0 |20AUG2026|Add set_duckdb|Minor|
 |0.3.2 |19AUG2026|Add Init documentation|Patch |
 |0.3.1 |17AUG2026|Fix Vector DB initialisation bug \n Prompts modified|Patch|
