@@ -12,13 +12,25 @@ def generate_duckdb_query(system_prompt: str,user_prompt: str, explain_results: 
 
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
-    FALLBACK_MODELS = ["gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-3.1-pro-preview","gemini-3.1-flash-lite", "gemini-2.5-flash"]
+    FALLBACK_MODELS = ["gemini-3.7-flash","gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-3.1-pro-preview","gemini-3.1-flash-lite", "gemini-2.5-flash"]
 
     for model in FALLBACK_MODELS:
         try:
+           # Issue #3 - using the following as a workaround until a fix appears.
+           config={
+                "tools": [
+                    {
+                        "function_declarations": [
+                            {"name": "ping", "description": "Return pong"}
+                        ]
+                    }
+                ]
+            }   
+
            response = client.models.generate_content(
                model=model,
-               contents=system_prompt + "\n\n" + user_prompt 
+               contents=system_prompt + "\n\n" + user_prompt,
+               config = config 
                )
            break
         except Exception as e:

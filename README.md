@@ -122,10 +122,10 @@ To facilitate RAG, a `search` method and a `sync_docs` method are also provided 
 This repository contains a `tasks.json` meant for use in Visual Studio Code which helps clean up temporary files and stands up a virtual environment for quick development and exploration.  Remove this file if you do not want to have Visual Studio Code run the tasks in `tasks.json`.
 
 ## Change Log
+* Version: 0.5.1 (26AUG2026)
+  - Fix Gemini warning issue
 * Version: 0.5.0 (24AUG2026)
   - Add file based execution to generate, execute and sql methods 
-* Version: 0.3.1 (17AUG2026)
-  - Fix Vector DB initialisation bug 
 * Version: 0.3.0 (05AUG2026)
   - Add search method and RAG 
 
