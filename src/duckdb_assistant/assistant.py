@@ -167,10 +167,11 @@ class DuckDBAssistant:
         collection_count = store_in_chroma(docs, collection_name = "duckdb_docs", persist_dir = self.chroma_collection_path)
         return f"{collection_count} documents available in collection duckdb_docs"
     
-    def search(self, prompt:str, n_results:int = 10):
+    def search(self, prompt:str, n_results:int = 10, display_results = False):
         "Given a user prompt, retrieve top n_results in terms of similarity to provide RAG"
         import chromadb
         from .local_collection import find_elbow_distance
+        from IPython.display import display, Markdown
         with chromadb.PersistentClient(self.chroma_collection_path) as client:
             collection = client.get_collection("duckdb_docs")
             if collection.count()>0:
@@ -178,6 +179,9 @@ class DuckDBAssistant:
                 client.close()
                 elbow = find_elbow_distance(results["distances"][0])
                 results = {k: v[0][:elbow+1] for k, v in results.items() if k in ["documents","metadatas"]}
+                if display_results:
+                    for document in results["documents"]:
+                        display(Markdown(document))
                 return results
             else:
                 return {"error":"Collection is empty"}

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "duckdb-assistant"
-version = "0.5.1"
+version = "0.5.2"
 dependencies = [
     "duckdb",
     "google-genai",

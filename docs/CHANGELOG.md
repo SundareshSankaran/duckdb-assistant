@@ -2,6 +2,7 @@
 
 |Version|Date|Details|Type|
 |-------|----|-------|----|
+|0.5.2 |30AUG2026|Render search results in Markdown |Patch|
 |0.5.1 |26AUG2026|Fix Gemini AFC warning issue |Patch|
 |0.5.0 |24AUG2026|Add file based execution to generate, execute and sql methods |Minor|
 |0.4.0 |20AUG2026|Add set_duckdb|Minor|
