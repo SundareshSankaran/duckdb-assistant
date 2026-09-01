@@ -52,11 +52,13 @@ class DuckDBAssistant:
     def __setitem__(self, key, value):
         setattr(self, key, value)
    
-    def generate(self, prompt:str, explain_results: bool = False, use_rag: bool = True, sql_file_path: str = None ) -> dict:
+    def generate(self, prompt:str, explain_results: bool = False, use_rag: bool = True, sql_file_path: str = None, display_results:bool = False ) -> dict:
         """This function generates a DuckDB SQL query based on a given prompt using Gemini API. Provide the prompt as an argument."""
         from .gemini_api import generate_duckdb_query
         from .helpers import soft_warning, check_collection_exists
+        from IPython.display import display, Markdown
         if explain_results == True:
+            display_results = True
             system_prompt = f"{self.system_prompt}\n Include a summary explanation of the code, focussing on what the code does, with the SQL query contained in a single markdown code block at the beginning. Sometimes users may ask for just an explanation or information on DuckDB, omit the code block in such a case."
         else:
             system_prompt = f"{self.system_prompt}\n Include ONLY the SQL query contained in a single markdown code block . Do not include any additional text or explanation."
@@ -75,6 +77,8 @@ class DuckDBAssistant:
             if sql_file_path:
                 with open(sql_file_path,"w",encoding="utf-8") as f:
                     f.write(query_result["query"])
+            if display_results:
+                display(Markdown(query_result["response_text"]))
             return query_result
         except Exception as e:
             return {"query": f"Error occurred: {e}"}
@@ -167,7 +171,7 @@ class DuckDBAssistant:
         collection_count = store_in_chroma(docs, collection_name = "duckdb_docs", persist_dir = self.chroma_collection_path)
         return f"{collection_count} documents available in collection duckdb_docs"
     
-    def search(self, prompt:str, n_results:int = 10, display_results = False):
+    def search(self, prompt:str, n_results:int = 10, display_results: bool = False):
         "Given a user prompt, retrieve top n_results in terms of similarity to provide RAG"
         import chromadb
         from .local_collection import find_elbow_distance
