@@ -122,7 +122,7 @@ To facilitate RAG, a `search` method and a `sync_docs` method are also provided 
 This repository contains a `tasks.json` meant for use in Visual Studio Code which helps clean up temporary files and stands up a virtual environment for quick development and exploration.  Remove this file if you do not want to have Visual Studio Code run the tasks in `tasks.json`.
 
 ## Change Log
-* Version: 0.7.0 (07SEP2026)
+* Version: 0.6.0 (07SEP2026)
   - Save Interaction history
 
 
