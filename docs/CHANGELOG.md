@@ -2,6 +2,7 @@
 
 |Version|Date|Details|Type|
 |-------|----|-------|----|
+|0.6.0 |07SEP2026|Save Interaction History |Minor|
 |0.5.3 |01SEP2026|Render results explanation in Markdown |Patch|
 |0.5.2 |30AUG2026|Render search results in Markdown |Patch|
 |0.5.1 |26AUG2026|Fix Gemini AFC warning issue |Patch|

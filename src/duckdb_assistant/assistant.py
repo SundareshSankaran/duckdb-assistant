@@ -1,6 +1,6 @@
 class DuckDBAssistant:
     """This initialises a class to help you generate and execute DuckDB queries."""
-    def __init__(self, additional_system_prompt: str = None, name: str = None, creationTimeStamp: str = None, createdBy: str = None, dd: DuckDBPyConnection = None, initial_sql: str = None, chroma_collection_path: str = None) -> object:
+    def __init__(self, additional_system_prompt: str = None, name: str = None, creationTimeStamp: str = None, createdBy: str = None, dd: DuckDBPyConnection = None, initial_sql: str = None, chroma_collection_path: str = None, save_conversation: bool = False, conversation_path:str = None) -> object:
         import json
         import duckdb 
         import os
@@ -27,6 +27,7 @@ class DuckDBAssistant:
         self.createdBy=createdBy  if createdBy else self.createdBy
         self.system_prompt = system_prompt if system_prompt else self.system_prompt
         self.dd = dd if dd != None else duckdb.connect()
+        self.conversation_counter = 0
 
         self.dd.execute(initial_sql) if initial_sql else None
 
@@ -47,15 +48,20 @@ class DuckDBAssistant:
         # Create the Chroma collection path directory if it does not exist
         os.makedirs(self.chroma_collection_path, exist_ok=True)     
 
+        # Create a folder for saving conversation history identified by the ID of the DuckDBAssistant
+        if save_conversation == True:
+            self.conversation_path = conversation_path if conversation_path!= None else os.getenv("CONVERSATION_PATH", os.path.join(os.getcwd(),f"Interaction-{self.id}"))
+            os.makedirs(self.conversation_path,exist_ok=True)
+
            
         
     def __setitem__(self, key, value):
         setattr(self, key, value)
    
-    def generate(self, prompt:str, explain_results: bool = False, use_rag: bool = True, sql_file_path: str = None, display_results:bool = False ) -> dict:
+    def generate(self, prompt:str, explain_results: bool = False, use_rag: bool = True, sql_file_path: str = None, display_results:bool = False, conversation_path: str = None ) -> dict:
         """This function generates a DuckDB SQL query based on a given prompt using Gemini API. Provide the prompt as an argument."""
         from .gemini_api import generate_duckdb_query
-        from .helpers import soft_warning, check_collection_exists
+        from .helpers import soft_warning, check_collection_exists, save_conversation
         from IPython.display import display, Markdown
         if explain_results == True:
             display_results = True
@@ -69,7 +75,7 @@ class DuckDBAssistant:
             else:
                 rag_results = self.search(prompt)
                 rag_context = "|".join(rag_results["documents"])
-            prompt+=f"Context: {rag_context}"
+            prompt+=f"\n ---\n ### Context: \n {rag_context}"
         
         try:
             query_result = generate_duckdb_query(system_prompt = system_prompt,user_prompt = f"User prompt: {prompt}", explain_results = explain_results)
@@ -79,6 +85,9 @@ class DuckDBAssistant:
                     f.write(query_result["query"])
             if display_results:
                 display(Markdown(query_result["response_text"]))
+            if save_conversation(prompt,query_result["response_text"],self,conversation_path) == True:
+                print("Interaction has been saved")
+                self.conversation_counter += 1 
             return query_result
         except Exception as e:
             return {"query": f"Error occurred: {e}"}
