@@ -1,4 +1,4 @@
-def generate_duckdb_query(system_prompt: str,user_prompt: str, explain_results: bool) -> dict:
+def generate_duckdb_query(system_prompt: str,user_prompt: str, explain_results: bool, model_list: list) -> dict:
     """This function generates DuckDB SQL based on a given user prompt using the Gemini API."""
     import os
     import json
@@ -12,9 +12,9 @@ def generate_duckdb_query(system_prompt: str,user_prompt: str, explain_results: 
 
     client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
 
-    FALLBACK_MODELS = ["gemini-3.7-flash","gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-3.1-pro-preview","gemini-3.1-flash-lite", "gemini-2.5-flash"]
+    # FALLBACK_MODELS = ["gemini-3.7-flash","gemini-3.6-flash", "gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-3.1-pro-preview","gemini-3.1-flash-lite", "gemini-2.5-flash"]
 
-    for model in FALLBACK_MODELS:
+    for model in model_list:
         try:
            # Issue #3 - using the following as a workaround until a fix appears.
            config={

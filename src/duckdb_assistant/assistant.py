@@ -28,6 +28,11 @@ class DuckDBAssistant:
         self.system_prompt = system_prompt if system_prompt else self.system_prompt
         self.dd = dd if dd != None else duckdb.connect()
         self.conversation_counter = 0
+        if os.getenv("FALLBACK_MODELS"):
+            self.model_list = os.environ["FALLBACK_MODELS"].split(",")
+            print(self.model_list)
+        else:
+            self.set_model_list(model_list = ["gemini-3.7-flash"])
 
         self.dd.execute(initial_sql) if initial_sql else None
 
@@ -78,7 +83,7 @@ class DuckDBAssistant:
             prompt+=f"\n ---\n ### Context: \n {rag_context}"
         
         try:
-            query_result = generate_duckdb_query(system_prompt = system_prompt,user_prompt = f"User prompt: {prompt}", explain_results = explain_results)
+            query_result = generate_duckdb_query(system_prompt = system_prompt,user_prompt = f"User prompt: {prompt}", explain_results = explain_results, model_list = self.model_list)
             self.last_query = {"user_prompt": prompt,"response_text": query_result["response_text"], "duckdb_query": query_result["query"]}
             if sql_file_path:
                 with open(sql_file_path,"w",encoding="utf-8") as f:
@@ -204,5 +209,21 @@ class DuckDBAssistant:
         self.dd = dd
         return f"DuckDB connection set to {dd}"
 
+    def add_models(self, model_list: list):
+        "Given an argument for a single additional model or a list of new models, adds the specified models to the DuckDBAssistant's moddel_list attribuute."
+        if isinstance(model_list, list):
+            self.model_list.extend(model_list)
+        else:
+            self.model_list.append(model_list)
 
+    def set_model_list(self,model_list: list):
+        "Given a new list of candidate LLM references, sets the model_list attribute to the new list"
+        model_list = model_list if isinstance(model_list, list) else [model_list]
+        self.model_list = model_list
 
+    def remove_models(self, model_list: list):
+        "Given an argument for a single additional model or a list of new models, adds the specified models to the DuckDBAssistant's moddel_list attribuute."
+        model_list = model_list if isinstance(model_list, list) else [model_list]
+        for item in model_list:
+            if item in self.model_list:
+                self.model_list.remove(item)
