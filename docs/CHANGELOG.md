@@ -2,6 +2,7 @@
 
 |Version|Date|Details|Type|
 |-------|----|-------|----|
+|0.7.1 |09OCT2026|Maintain supported LLMs |Patch|
 |0.7.0 |15SEP2026|Model Management and Configuration methods |Minor|
 |0.6.0 |07SEP2026|Save Interaction History |Minor|
 |0.5.3 |01SEP2026|Render results explanation in Markdown |Patch|

@@ -32,7 +32,7 @@ class DuckDBAssistant:
             self.model_list = os.environ["FALLBACK_MODELS"].split(",")
             print(self.model_list)
         else:
-            self.set_model_list(model_list = ["gemini-3.7-flash"])
+            self.set_model_list(model_list = ["gemini-3.8-flash"])
 
         self.dd.execute(initial_sql) if initial_sql else None
 
